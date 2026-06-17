@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curated Looks & Smart Spaces</title>
+    <meta name="description" content="Discover curated collections of desk setups, home decor, outfits, and kitchen setups with smart links.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --text-color: #f3f4f6;
+            --muted-color: #9ca3af;
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.4);
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent: #06b6d4;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-title: 'Outfit', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        header {
+            border-bottom: 1px solid var(--card-border);
+            padding: 24px 0;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-title);
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0 40px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-title);
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            background: linear-gradient(to right, #ffffff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--muted-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Post Grid */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .post-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 10px 30px var(--primary-glow);
+        }
+
+        .post-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .post-card-content {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .post-card-tag {
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+
+        .post-card-title {
+            font-family: var(--font-title);
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .post-card-desc {
+            font-size: 14px;
+            color: var(--muted-color);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .post-card-date {
+            font-size: 12px;
+            color: var(--muted-color);
+            margin-top: auto;
+        }
+
+        /* Single Post View */
+        .post-view {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 24px;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .back-link:hover {
+            transform: translateX(-4px);
+        }
+
+        .post-header {
+            margin-bottom: 32px;
+        }
+
+        .post-title {
+            font-family: var(--font-title);
+            font-size: 38px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .post-meta {
+            color: var(--muted-color);
+            font-size: 14px;
+        }
+
+        .post-lifestyle-img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 40px;
+        }
+
+        .post-body {
+            font-size: 17px;
+            line-height: 1.8;
+            color: #e5e7eb;
+        }
+
+        .post-body p {
+            margin-bottom: 24px;
+        }
+
+        .post-body h2 {
+            font-family: var(--font-title);
+            font-size: 26px;
+            color: #fff;
+            margin: 40px 0 20px;
+        }
+
+        .post-body h3 {
+            font-family: var(--font-title);
+            font-size: 20px;
+            color: #fff;
+            margin: 30px 0 16px;
+        }
+
+        /* Products Widget */
+        .products-section {
+            margin-top: 60px;
+            border-top: 1px solid var(--card-border);
+            padding-top: 40px;
+        }
+
+        .products-section-title {
+            font-family: var(--font-title);
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        .products-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        .product-widget {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 600px) {
+            .product-widget {
+                grid-template-columns: 1fr;
+            }
+            .product-widget-img {
+                height: 200px !important;
+            }
+        }
+
+        .product-widget-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-right: 1px solid var(--card-border);
+        }
+
+        .product-widget-details {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-widget-title {
+            font-family: var(--font-title);
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .product-widget-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .product-widget-desc {
+            font-size: 14px;
+            color: var(--muted-color);
+            margin-bottom: 16px;
+        }
+
+        .product-widget-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            align-self: flex-start;
+            font-size: 14px;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .product-widget-button:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        footer {
+            margin-top: 80px;
+            border-top: 1px solid var(--card-border);
+            padding: 32px 0;
+            text-align: center;
+            font-size: 14px;
+            color: var(--muted-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">Curated Looks & Spaces</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main Hub View -->
+        <div id="hub-view">
+            <div class="hero">
+                <h1>Beautiful Spaces, Curated Styles</h1>
+                <p>Explore gorgeous desk setups, outfit styles, home decor, and gifts. Designed with passion, sourced with care.</p>
+            </div>
+            <div class="posts-grid" id="posts-container">
+                <!-- Posts will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Single Post View -->
+        <div id="post-view" class="post-view">
+            <a href="#" class="back-link">&larr; Back to Curated Looks</a>
+            <article>
+                <div class="post-header">
+                    <h1 id="view-title" class="post-title">Post Title</h1>
+                    <div class="post-meta">Published on <span id="view-date">Date</span></div>
+                </div>
+                <img id="view-image" class="post-lifestyle-img" src="" alt="Lifestyle Setup">
+                <div id="view-body" class="post-body">
+                    <!-- Post content dynamically parsed -->
+                </div>
+                <div class="products-section">
+                    <h2 class="products-section-title">Shop This Look</h2>
+                    <div class="products-list" id="view-products">
+                        <!-- Products will load here -->
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Curated Looks & Spaces. As an Amazon Associate, we earn from qualifying purchases.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Injected data placeholder (will be replaced by automation engine)
+        // For testing/fallback, we fetch posts.json
+        let postsData = [];
+
+        async function init() {
+            try {
+                const response = await fetch('./posts.json');
+                if (response.ok) {
+                    postsData = await response.json();
+                }
+            } catch (e) {
+                console.error("Failed to load posts.json", e);
+                // Fallback demo data
+                postsData = [
+                    {
+                        "id": "post-1",
+                        "title": "Creating the Ultimate Minimalist Work Space for Coding",
+                        "slug": "ultimate-minimalist-coding-workspace",
+                        "description": "Have you wanted a desk setup that minimizes distraction and maximizes productivity? Explore this layout.",
+                        "content": "Having a clean, productive workspace is essential for long coding sessions. In this blog post, we break down a stunning dark academic desk setup that balances aesthetics with functional comfort.\n\n## The Core Accessories\n\nHere are the top three items that will elevate your setup:\n\n### 1. Keychron K2 Mechanical Keyboard\nThe tactile typing experience with Mac and Windows compatibility makes it a joy to type on.\n\n### 2. BenQ ScreenBar Monitor Light\nClamps to your monitor to illuminate your workspace without reflecting glare off your screen.\n\n### 3. Logitech MX Master 3S Mouse\nComfortable ergonomics, customizable buttons, and fluid scrolling across codebases.",
+                        "lifestyleImage": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=1200",
+                        "type": "desk-setups",
+                        "datePublished": "2026-06-17T12:20:00.000Z",
+                        "products": [
+                            {
+                                "name": "Keychron K2 Version 2 Mechanical Keyboard",
+                                "price": "$79.99",
+                                "description": "A 75% layout wireless mechanical keyboard with Gateron switches and solid aluminum frame.",
+                                "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600",
+                                "url": "https://www.amazon.com/dp/B0875NSSBB"
+                            },
+                            {
+                                "name": "BenQ ScreenBar Monitor LED Light",
+                                "price": "$109.00",
+                                "description": "Auto-dimming computer monitor light bar that eliminates screen glare, saving desk space.",
+                                "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600",
+                                "url": "https://www.amazon.com/dp/B076VNFZ14"
+                            }
+                        ]
+                    }
+                ];
+            }
+
+            renderView();
+            window.addEventListener('hashchange', renderView);
+        }
+
+        function renderView() {
+            const hash = window.location.hash;
+            const hubView = document.getElementById('hub-view');
+            const postView = document.getElementById('post-view');
+
+            if (hash.startsWith('#/post/')) {
+                const slug = hash.replace('#/post/', '');
+                const post = postsData.find(p => p.slug === slug);
+                if (post) {
+                    hubView.style.display = 'none';
+                    postView.style.display = 'block';
+                    displayPost(post);
+                    window.scrollTo(0, 0);
+                } else {
+                    window.location.hash = '';
+                }
+            } else {
+                postView.style.display = 'none';
+                hubView.style.display = 'block';
+                displayHub();
+            }
+        }
+
+        function displayHub() {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = '';
+
+            if (postsData.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--muted-color); padding: 40px 0;">No curated collections found. Run the automation generator to publish!</p>';
+                return;
+            }
+
+            postsData.forEach(post => {
+                const card = document.createElement('a');
+                card.className = 'post-card';
+                card.href = `#/post/${post.slug}`;
+                
+                // Format date
+                const date = new Date(post.datePublished).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                card.innerHTML = `
+                    <img class="post-card-img" src="${post.lifestyleImage}" alt="${post.title}">
+                    <div class="post-card-content">
+                        <div class="post-card-tag">${post.type || 'Collection'}</div>
+                        <h2 class="post-card-title">${post.title}</h2>
+                        <p class="post-card-desc">${post.description || ''}</p>
+                        <div class="post-card-date">${date}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function parseMarkdown(text) {
+            if (!text) return '';
+            // Basic secure Markdown parser
+            let html = text
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/\n\n/g, '</p><p>');
+
+            return '<p>' + html + '</p>';
+        }
+
+        function displayPost(post) {
+            document.title = `${post.title} - Curated Looks`;
+            document.getElementById('view-title').innerText = post.title;
+            document.getElementById('view-date').innerText = new Date(post.datePublished).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('view-image').src = post.lifestyleImage;
+            document.getElementById('view-image').alt = post.title;
+
+            // Render Markdown body
+            document.getElementById('view-body').innerHTML = parseMarkdown(post.content);
+
+            // Render Products
+            const productsContainer = document.getElementById('view-products');
+            productsContainer.innerHTML = '';
+
+            if (post.products && post.products.length > 0) {
+                post.products.forEach(prod => {
+                    const prodWidget = document.createElement('div');
+                    prodWidget.className = 'product-widget';
+                    
+                    prodWidget.innerHTML = `
+                        <img class="product-widget-img" src="${prod.image}" alt="${prod.name}">
+                        <div class="product-widget-details">
+                            <h3 class="product-widget-title">${prod.name}</h3>
+                            <div class="product-widget-price">${prod.price || 'Check Price'}</div>
+                            <p class="product-widget-desc">${prod.description || ''}</p>
+                            <a class="product-widget-button" href="${prod.url}" target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
+                        </div>
+                    `;
+                    productsContainer.appendChild(prodWidget);
+                });
+            } else {
+                productsContainer.innerHTML = '<p style="color: var(--muted-color)">No shop links listed for this layout.</p>';
+            }
+        }
+
+        // Initialize App
+        init();
+    </script>
+</body>
+</html>

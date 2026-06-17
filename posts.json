@@ -1,0 +1,28 @@
+[
+  {
+    "id": "post-1",
+    "title": "Creating the Ultimate Minimalist Work Space for Coding",
+    "slug": "ultimate-minimalist-coding-workspace",
+    "description": "Have you wanted a desk setup that minimizes distraction and maximizes productivity? Explore this layout.",
+    "content": "Having a clean, productive workspace is essential for long coding sessions. In this blog post, we break down a stunning dark academic desk setup that balances aesthetics with functional comfort.\n\n## The Core Accessories\n\nHere are the top three items that will elevate your setup:\n\n### 1. Keychron K2 Mechanical Keyboard\nThe tactile typing experience with Mac and Windows compatibility makes it a joy to type on.\n\n### 2. BenQ ScreenBar Monitor Light\nClamps to your monitor to illuminate your workspace without reflecting glare off your screen.\n\n### 3. Logitech MX Master 3S Mouse\nComfortable ergonomics, customizable buttons, and fluid scrolling across codebases.",
+    "lifestyleImage": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=1200",
+    "type": "desk-setups",
+    "datePublished": "2026-06-17T12:20:00.000Z",
+    "products": [
+      {
+        "name": "Keychron K2 Version 2 Mechanical Keyboard",
+        "price": "$79.99",
+        "description": "A 75% layout wireless mechanical keyboard with Gateron switches and solid aluminum frame.",
+        "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=600",
+        "url": "https://www.amazon.com/dp/B0875NSSBB"
+      },
+      {
+        "name": "BenQ ScreenBar Monitor LED Light",
+        "price": "$109.00",
+        "description": "Auto-dimming computer monitor light bar that eliminates screen glare, saving desk space.",
+        "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600",
+        "url": "https://www.amazon.com/dp/B076VNFZ14"
+      }
+    ]
+  }
+]
