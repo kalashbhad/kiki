@@ -331,6 +331,61 @@
             transform: translateY(-1px);
         }
 
+        /* Numbered Roundup Styles */
+        .roundup-list {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .roundup-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+        }
+
+        .roundup-number {
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background: var(--primary);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 18px;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        .roundup-item-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .roundup-item-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .roundup-item-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+
         footer {
             margin-top: 80px;
             border-top: 1px solid var(--card-border);
@@ -369,13 +424,15 @@
                     <div class="post-meta">Published on <span id="view-date">Date</span></div>
                 </div>
                 <img id="view-image" class="post-lifestyle-img" src="" alt="Lifestyle Setup">
+                
                 <div id="view-body" class="post-body">
                     <!-- Post content dynamically parsed -->
                 </div>
-                <div class="products-section">
-                    <h2 class="products-section-title">Shop This Look</h2>
+
+                <div class="products-section" id="view-products-container">
+                    <h2 class="products-section-title" id="shop-title">Shop This Look</h2>
                     <div class="products-list" id="view-products">
-                        <!-- Products will load here -->
+                        <!-- Products will load here based on layouts -->
                     </div>
                 </div>
             </article>
@@ -389,8 +446,6 @@
     </footer>
 
     <script>
-        // Injected data placeholder (will be replaced by automation engine)
-        // For testing/fallback, we fetch posts.json
         let postsData = [];
 
         async function init() {
@@ -410,7 +465,7 @@
                         "description": "Have you wanted a desk setup that minimizes distraction and maximizes productivity? Explore this layout.",
                         "content": "Having a clean, productive workspace is essential for long coding sessions. In this blog post, we break down a stunning dark academic desk setup that balances aesthetics with functional comfort.\n\n## The Core Accessories\n\nHere are the top three items that will elevate your setup:\n\n### 1. Keychron K2 Mechanical Keyboard\nThe tactile typing experience with Mac and Windows compatibility makes it a joy to type on.\n\n### 2. BenQ ScreenBar Monitor Light\nClamps to your monitor to illuminate your workspace without reflecting glare off your screen.\n\n### 3. Logitech MX Master 3S Mouse\nComfortable ergonomics, customizable buttons, and fluid scrolling across codebases.",
                         "lifestyleImage": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=1200",
-                        "type": "desk-setups",
+                        "type": "multiple",
                         "datePublished": "2026-06-17T12:20:00.000Z",
                         "products": [
                             {
@@ -464,7 +519,7 @@
             container.innerHTML = '';
 
             if (postsData.length === 0) {
-                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--muted-color); padding: 40px 0;">No curated collections found. Run the automation generator to publish!</p>';
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--muted-color); padding: 40px 0;">No articles found. Run the automation generator to publish!</p>';
                 return;
             }
 
@@ -473,7 +528,6 @@
                 card.className = 'post-card';
                 card.href = `#/post/${post.slug}`;
                 
-                // Format date
                 const date = new Date(post.datePublished).toLocaleDateString('en-US', {
                     year: 'numeric', month: 'long', day: 'numeric'
                 });
@@ -481,7 +535,7 @@
                 card.innerHTML = `
                     <img class="post-card-img" src="${post.lifestyleImage}" alt="${post.title}">
                     <div class="post-card-content">
-                        <div class="post-card-tag">${post.type || 'Collection'}</div>
+                        <div class="post-card-tag">${post.type || 'Campaign'}</div>
                         <h2 class="post-card-title">${post.title}</h2>
                         <p class="post-card-desc">${post.description || ''}</p>
                         <div class="post-card-date">${date}</div>
@@ -493,7 +547,6 @@
 
         function parseMarkdown(text) {
             if (!text) return '';
-            // Basic secure Markdown parser
             let html = text
                 .replace(/^# (.*$)/gim, '<h1>$1</h1>')
                 .replace(/^## (.*$)/gim, '<h2>$1</h2>')
@@ -501,7 +554,8 @@
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
                 .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
-                .replace(/\n\n/g, '</p><p>');
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br/>');
 
             return '<p>' + html + '</p>';
         }
@@ -515,35 +569,86 @@
             document.getElementById('view-image').src = post.lifestyleImage;
             document.getElementById('view-image').alt = post.title;
 
-            // Render Markdown body
+            // Render Body
             document.getElementById('view-body').innerHTML = parseMarkdown(post.content);
 
-            // Render Products
             const productsContainer = document.getElementById('view-products');
             productsContainer.innerHTML = '';
+            
+            const layoutType = post.type || 'multiple';
 
             if (post.products && post.products.length > 0) {
-                post.products.forEach(prod => {
-                    const prodWidget = document.createElement('div');
-                    prodWidget.className = 'product-widget';
-                    
-                    prodWidget.innerHTML = `
-                        <img class="product-widget-img" src="${prod.image}" alt="${prod.name}">
-                        <div class="product-widget-details">
-                            <h3 class="product-widget-title">${prod.name}</h3>
-                            <div class="product-widget-price">${prod.price || 'Check Price'}</div>
-                            <p class="product-widget-desc">${prod.description || ''}</p>
-                            <a class="product-widget-button" href="${prod.url}" target="_blank" rel="noopener noreferrer">Shop on Amazon</a>
-                        </div>
-                    `;
-                    productsContainer.appendChild(prodWidget);
-                });
+                if (layoutType === 'roundup') {
+                    // Roundup Numbered layout
+                    document.getElementById('view-products-container').style.display = 'block';
+                    document.getElementById('shop-title').innerText = "Curated Recommendations";
+                    productsContainer.className = "roundup-list";
+
+                    post.products.forEach((prod, index) => {
+                        const itemWrap = document.createElement('div');
+                        itemWrap.className = "roundup-item";
+                        
+                        itemWrap.innerHTML = `
+                            <div class="roundup-number">${index + 1}</div>
+                            <div class="roundup-item-grid">
+                                <img class="roundup-item-img" src="${prod.image}" alt="${prod.name}">
+                                <div>
+                                    <h3 style="font-family: var(--font-title); font-size: 20px; color: #fff; margin-bottom: 6px;">${prod.name}</h3>
+                                    <div class="product-widget-price">${prod.price || 'Check Price'}</div>
+                                    <p class="product-widget-desc" style="margin-bottom: 20px;">${prod.description || ''}</p>
+                                    <a class="product-widget-button" href="${prod.url}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+                                </div>
+                            </div>
+                        `;
+                        productsContainer.appendChild(itemWrap);
+                    });
+                } else if (layoutType === 'single') {
+                    // Single Review Layout
+                    document.getElementById('view-products-container').style.display = 'block';
+                    document.getElementById('shop-title').innerText = "Product Deal Details";
+                    productsContainer.className = "products-list";
+
+                    const prod = post.products[0];
+                    if (prod) {
+                        const prodWidget = document.createElement('div');
+                        prodWidget.className = 'product-widget';
+                        prodWidget.innerHTML = `
+                            <img class="product-widget-img" src="${prod.image}" alt="${prod.name}">
+                            <div class="product-widget-details">
+                                <h3 class="product-widget-title">${prod.name}</h3>
+                                <div class="product-widget-price">${prod.price}</div>
+                                <p class="product-widget-desc">${prod.description}</p>
+                                <a class="product-widget-button" href="${prod.url}" target="_blank" rel="noopener noreferrer">Buy Now From Amazon</a>
+                            </div>
+                        `;
+                        productsContainer.appendChild(prodWidget);
+                    }
+                } else {
+                    // "Multiple in One" Grid Layout (shows Pin image then individual cards)
+                    document.getElementById('view-products-container').style.display = 'block';
+                    document.getElementById('shop-title').innerText = "Shop This Look";
+                    productsContainer.className = "products-list";
+
+                    post.products.forEach(prod => {
+                        const prodWidget = document.createElement('div');
+                        prodWidget.className = 'product-widget';
+                        prodWidget.innerHTML = `
+                            <img class="product-widget-img" src="${prod.image}" alt="${prod.name}">
+                            <div class="product-widget-details">
+                                <h3 class="product-widget-title">${prod.name}</h3>
+                                <div class="product-widget-price">${prod.price || 'Check Price'}</div>
+                                <p class="product-widget-desc">${prod.description || ''}</p>
+                                <a class="product-widget-button" href="${prod.url}" target="_blank" rel="noopener noreferrer">Buy this from Amazon</a>
+                            </div>
+                        `;
+                        productsContainer.appendChild(prodWidget);
+                    });
+                }
             } else {
-                productsContainer.innerHTML = '<p style="color: var(--muted-color)">No shop links listed for this layout.</p>';
+                document.getElementById('view-products-container').style.display = 'none';
             }
         }
 
-        // Initialize App
         init();
     </script>
 </body>
